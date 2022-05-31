@@ -8,7 +8,6 @@ import database.register.ParametersRegister;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
 
 import static java.lang.System.Logger.Level.INFO;
 import static java.lang.System.getLogger;
@@ -18,8 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         CommandLine cmd = parseArguments(args);
-
-        if (isConfigurationInvalid(cmd)) {
+        if (cmd.getOptions().length == 0) {
             printHelp();
         }
     }
@@ -30,16 +28,6 @@ public class Main {
             parameters.getAll().getOptions().forEach(options::addOption);
         }
         return new DefaultParser().parse(options, args);
-    }
-
-    protected static boolean isConfigurationInvalid(CommandLine cmd) {
-        Options options = new Options();
-        Arrays.stream(cmd.getOptions()).forEach(options::addOption);
-
-        boolean noOptionsConfigured = options.getOptions().size() == 0;
-        boolean noCommandsConfigured = ParametersRegister.getParameters().stream().noneMatch(p -> p.isConfigured(options));
-
-        return noOptionsConfigured || noCommandsConfigured;
     }
 
     private static void printHelp() throws IOException {

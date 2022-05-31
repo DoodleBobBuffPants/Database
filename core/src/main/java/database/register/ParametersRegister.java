@@ -1,6 +1,7 @@
 package database.register;
 
 import database.api.Parameters;
+import database.api.exception.NoServiceFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,14 @@ public class ParametersRegister {
             register();
         }
         return parameters;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends Parameters> T getParameter(Class<T> clazz) {
+        return (T) getParameters().stream()
+                                  .filter(p -> p.getClass().getCanonicalName().equals(clazz.getCanonicalName()))
+                                  .findFirst()
+                                  .orElseThrow(() -> new NoServiceFoundException(clazz));
     }
 
     private synchronized static void register() {

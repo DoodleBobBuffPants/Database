@@ -10,6 +10,6 @@ public class ParametersRegisterTest {
     @Test
     public void allParametersImplementationsAreLoaded() {
         List<String> parameters = ParametersRegister.getParameters().stream().map(p -> p.getClass().getSimpleName()).toList();
-        assertEquals(0, parameters.size());
+        assertEquals(1, parameters.size());
     }
 }
