@@ -1,15 +1,9 @@
 package database.api.exception;
 
-import org.apache.commons.cli.CommandLine;
-
-import static java.lang.System.Logger.Level.DEBUG;
-import static java.lang.System.getLogger;
+import database.api.Configuration;
 
 public class NoDatabaseFoundException extends RuntimeException {
-    private static final System.Logger logger = getLogger(NoDatabaseFoundException.class.getSimpleName());
-
-    public NoDatabaseFoundException(CommandLine cmd) {
-        super("No database found for the current configuration");
-        logger.log(DEBUG, cmd);
+    public NoDatabaseFoundException(Configuration configuration) {
+        super("No database found for the current configuration:" + System.lineSeparator() + configuration);
     }
 }

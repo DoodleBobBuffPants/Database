@@ -2,13 +2,10 @@ package database.api;
 
 import database.api.exception.UnableToConnectException;
 import database.register.ParametersRegister;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import static java.lang.System.Logger.Level.DEBUG;
 import static java.lang.System.getLogger;
@@ -19,8 +16,8 @@ public class DefaultDatabase extends Database {
     private String name;
 
     @Override
-    protected void init(CommandLine cmd) throws UnableToConnectException {
-        try (Connection connection = getConnection(cmd)) {
+    protected void init(Configuration configuration) throws UnableToConnectException {
+        try (Connection connection = getConnection(configuration)) {
             name = connection.getMetaData().getDatabaseProductName();
         } catch (SQLException e) {
             throw new UnableToConnectException(e);
@@ -28,15 +25,13 @@ public class DefaultDatabase extends Database {
     }
 
     @Override
-    protected boolean isConfigured(CommandLine cmd) {
-        Options options = new Options();
-        Arrays.stream(cmd.getOptions()).forEach(options::addOption);
-        return ParametersRegister.getParameter(DefaultParameters.class).isConfigured(options);
+    protected boolean isConfigured(Configuration configuration) {
+        return ParametersRegister.getParameter(DefaultParameters.class).isConfigured(configuration.toOptions());
     }
 
     @Override
-    protected boolean canConnect(CommandLine cmd) {
-        try (Connection ignored = getConnection(cmd)) {
+    protected boolean canConnect(Configuration configuration) {
+        try (Connection ignored = getConnection(configuration)) {
             return true;
         } catch (SQLException e) {
             logger.log(DEBUG, "Unable to connect through " + getClass().getSimpleName() + ": " + e.getMessage());
@@ -49,10 +44,7 @@ public class DefaultDatabase extends Database {
         return name;
     }
 
-    private Connection getConnection(CommandLine cmd) throws SQLException {
-        String url = cmd.getOptionValue(DefaultParameters.url);
-        String username = cmd.getOptionValue(DefaultParameters.username);
-        String password = cmd.getOptionValue(DefaultParameters.password);
-        return DriverManager.getConnection(url, username, password);
+    private Connection getConnection(Configuration configuration) throws SQLException {
+        return DriverManager.getConnection(configuration.get(DefaultParameters.url), configuration.get(DefaultParameters.username), configuration.get(DefaultParameters.password));
     }
 }

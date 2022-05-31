@@ -3,26 +3,23 @@ package database.api;
 import database.api.exception.NoDatabaseFoundException;
 import database.api.exception.UnableToConnectException;
 import database.register.DatabaseRegister;
-import org.apache.commons.cli.CommandLine;
-
-import java.sql.SQLException;
 
 public abstract class Database {
-    public static Database connect(CommandLine cmd) throws UnableToConnectException {
+    static Database connect(Configuration configuration) throws UnableToConnectException {
         Database database = DatabaseRegister.getDatabases().stream()
-                .filter(d -> d.isConfigured(cmd))
-                .filter(d -> d.canConnect(cmd))
+                .filter(d -> d.isConfigured(configuration))
+                .filter(d -> d.canConnect(configuration))
                 .findFirst()
-                .orElseThrow(() -> new NoDatabaseFoundException(cmd));
-        database.init(cmd);
+                .orElseThrow(() -> new NoDatabaseFoundException(configuration));
+        database.init(configuration);
         return database;
     }
 
-    protected abstract void init(CommandLine cmd) throws UnableToConnectException;
+    protected abstract void init(Configuration configuration) throws UnableToConnectException;
 
-    protected abstract boolean isConfigured(CommandLine cmd);
+    protected abstract boolean isConfigured(Configuration configuration);
 
-    protected abstract boolean canConnect(CommandLine cmd);
+    protected abstract boolean canConnect(Configuration configuration);
 
     public abstract String getName();
 }
