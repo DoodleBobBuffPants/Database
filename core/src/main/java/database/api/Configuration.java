@@ -20,10 +20,10 @@ public class Configuration {
     }
 
     public String get(Option key) {
-       if (!configuration.containsKey(key)) {
-           throw new NoParameterFoundException(key);
-       }
-       return configuration.get(key);
+        if (!configuration.containsKey(key)) {
+            throw new NoParameterFoundException(key);
+        }
+        return configuration.get(key);
     }
 
     public Options toOptions() {

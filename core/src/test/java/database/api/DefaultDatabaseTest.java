@@ -25,8 +25,8 @@ public class DefaultDatabaseTest {
 
     private Configuration getDefaultConfiguration() {
         return Configuration.configure()
-                .set(DefaultParameters.url, "jdbc:h2:mem:test")
-                .set(DefaultParameters.username, "-username")
-                .set(DefaultParameters.password, "");
+                            .set(DefaultParameters.url, "jdbc:h2:mem:test")
+                            .set(DefaultParameters.username, "-username")
+                            .set(DefaultParameters.password, "");
     }
 }

@@ -7,10 +7,10 @@ import database.register.DatabaseRegister;
 public abstract class Database {
     static Database connect(Configuration configuration) throws UnableToConnectException {
         Database database = DatabaseRegister.getDatabases().stream()
-                .filter(d -> d.isConfigured(configuration))
-                .filter(d -> d.canConnect(configuration))
-                .findFirst()
-                .orElseThrow(() -> new NoDatabaseFoundException(configuration));
+                                            .filter(d -> d.isConfigured(configuration))
+                                            .filter(d -> d.canConnect(configuration))
+                                            .findFirst()
+                                            .orElseThrow(() -> new NoDatabaseFoundException(configuration));
         database.init(configuration);
         return database;
     }
