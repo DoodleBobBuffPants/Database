@@ -1,7 +1,7 @@
 package database.api.exception;
 
-public class NoServiceFoundException extends RuntimeException {
-    public NoServiceFoundException(Class<?> clazz) {
+public class ServiceNotFoundException extends RuntimeException {
+    public ServiceNotFoundException(Class<?> clazz) {
         super("No service with class name '" + clazz.getSimpleName() + "' found");
     }
 }

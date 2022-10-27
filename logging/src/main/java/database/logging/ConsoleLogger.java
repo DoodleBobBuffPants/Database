@@ -24,9 +24,7 @@ public class ConsoleLogger implements Logger {
 
     @Override
     public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) {
-        if (!isLoggable(level)) {
-            return;
-        }
+        if (!isLoggable(level)) return;
         switch (level) {
             case ERROR:
                 System.err.println(msg);

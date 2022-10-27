@@ -1,12 +1,15 @@
-package database.api;
+package database.jdbc;
 
+import database.api.Database;
+import database.api.DatabaseConfiguration;
 import database.api.exception.NoDatabaseFoundException;
 import database.api.exception.UnableToConnectException;
 import org.junit.jupiter.api.Test;
 
+import static database.jdbc.JdbcDatabaseOptions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DefaultDatabaseTest {
+public class JdbcDatabaseTest {
     @Test
     public void getsName() {
         try {
@@ -17,16 +20,13 @@ public class DefaultDatabaseTest {
         }
     }
 
-    @Test
-    public void failsOnEmptyConfiguration() {
-        NoDatabaseFoundException e = assertThrows(NoDatabaseFoundException.class, () -> Configuration.configure().connect());
-        assertEquals("No database found for the current configuration:" + System.lineSeparator(), e.getMessage());
+    private DatabaseConfiguration getDefaultConfiguration() {
+        return DatabaseConfiguration.configure().set(URL, "jdbc:h2:mem:test").set(USERNAME, "test").set(PASSWORD, "test");
     }
 
-    private Configuration getDefaultConfiguration() {
-        return Configuration.configure()
-                            .set(DefaultParameters.url, "jdbc:h2:mem:test")
-                            .set(DefaultParameters.username, "-username")
-                            .set(DefaultParameters.password, "");
+    @Test
+    public void failsOnEmptyConfiguration() {
+        NoDatabaseFoundException e = assertThrows(NoDatabaseFoundException.class, () -> DatabaseConfiguration.configure().connect());
+        assertEquals("No database found for the current configuration:" + System.lineSeparator(), e.getMessage());
     }
 }

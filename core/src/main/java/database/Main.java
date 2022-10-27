@@ -1,14 +1,15 @@
 package database;
 
-import database.api.Parameters;
+import database.api.DatabaseOptions;
 import database.comparator.OptionComparator;
+import database.register.DatabaseOptionsRegister;
 import org.apache.commons.cli.*;
-import database.register.ParametersRegister;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import static database.cli.CliDatabaseOptions.HELP;
 import static java.lang.System.Logger.Level.INFO;
 import static java.lang.System.getLogger;
 
@@ -17,16 +18,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         CommandLine cmd = parseArguments(args);
-        if (cmd.getOptions().length == 0) {
-            printHelp();
-        }
+        if (cmd.hasOption(HELP)) printHelp();
     }
 
-    protected static CommandLine parseArguments(String[] args) throws ParseException {
+    static CommandLine parseArguments(String[] args) throws ParseException {
         Options options = new Options();
-        for (Parameters parameters : ParametersRegister.getParameters()) {
-            parameters.getAll().getOptions().forEach(options::addOption);
-        }
+        for (DatabaseOptions databaseOptions : DatabaseOptionsRegister.get()) databaseOptions.getAll().getOptions().forEach(options::addOption);
         return new DefaultParser().parse(options, args);
     }
 
@@ -35,8 +32,8 @@ public class Main {
             HelpFormatter hf = new HelpFormatter();
             hf.setWidth(120);
             hf.setOptionComparator(new OptionComparator());
-            ParametersRegister.getParameters().forEach(p -> {
-                hf.printHelp(pw, hf.getWidth(), " ", null, p.getAll(), hf.getLeftPadding(), hf.getDescPadding(), null, true);
+            DatabaseOptionsRegister.get().forEach(o -> {
+                hf.printHelp(pw, hf.getWidth(), " ", null, o.getAll(), hf.getLeftPadding(), hf.getDescPadding(), null, true);
                 pw.println();
             });
             logger.log(INFO, sw.toString());

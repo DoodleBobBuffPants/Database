@@ -1,16 +1,17 @@
 package database.register;
 
+import database.jdbc.JdbcDatabase;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseRegisterTest {
     @Test
     public void allDatabaseImplementationsAreLoaded() {
-        List<String> databases = DatabaseRegister.getDatabases().stream().map(p -> p.getClass().getSimpleName()).toList();
+        List<String> databases = DatabaseRegister.get().stream().map(d -> d.getClass().getSimpleName()).toList();
         assertEquals(1, databases.size());
+        assertTrue(databases.contains(JdbcDatabase.class.getSimpleName()), databases.toString());
     }
 }
