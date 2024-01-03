@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Download IntelliJ
-        run: wget --no-verbose -O /tmp/ij.tar.gz https://download.jetbrains.com/product?code=IC&platform=linux
+        run: wget --no-verbose -O /tmp/ij.tar.gz "https://download.jetbrains.com/product?code=IC&platform=linux"
       - name: Unzip IntelliJ
         run: tar xzf /tmp/ij.tar.gz --directory /tmp && mv /tmp/idea* /tmp/ij
       - name: Run IntelliJ Formatting
